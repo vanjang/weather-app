@@ -46,6 +46,9 @@ struct SearchView: View {
                         if let cities = viewStore.cities, !cities.isEmpty {
                             ForEach(cities) { city in
                                 Text(city.name)
+                                    .onTapGesture {
+                                        viewStore.send(.setDetailPage(isPresented: true))
+                                    }
                             }
                         } else {
                             Text("No result found.")
@@ -53,7 +56,12 @@ struct SearchView: View {
                     })
                     .navigationTitle("Weather")
                     .navigationBarTitleDisplayMode(.inline)
+                    .sheet(isPresented: viewStore.binding(get: \.shouldShowDetailPage,
+                                                          send: SearchReducer.Action.setDetailPage(isPresented:))) {
+                        CityDetailView()
+                    }
                 }
+                
             }
         }
     }

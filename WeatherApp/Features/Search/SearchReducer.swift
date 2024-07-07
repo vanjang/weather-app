@@ -17,6 +17,7 @@ struct SearchReducer {
         var cities: [City]?
         var searchKeyword: String = ""
         var errorMessage: String?
+        var shouldShowDetailPage = false
         var isLoading: Bool = false
     }
     
@@ -26,6 +27,7 @@ struct SearchReducer {
         case fetchedCities([City])
         case saveKeyword(String)
         case getPreviousSearchHistory
+        case setDetailPage(isPresented: Bool)
         case setError(String)
     }
     
@@ -94,6 +96,9 @@ struct SearchReducer {
         case .setError(let error):
             state.errorMessage = error
             state.isLoading = false
+            return .none
+        case .setDetailPage(let isPresented):
+            state.shouldShowDetailPage = isPresented
             return .none
         }
     }
