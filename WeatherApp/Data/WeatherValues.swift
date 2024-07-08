@@ -8,8 +8,8 @@
 import Foundation
 
 struct WeatherValues: Codable, Equatable {
-    let temperature: Double
-    let weatherCode: Int
+    let temperature: Double?
+    let weatherCode: Int?
 }
 
 struct DailyWeatherValues: Codable, Equatable {

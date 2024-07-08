@@ -38,14 +38,26 @@ struct DetailReducer {
         case .fetchCurrentWeather(let keyword):
             state.isLoading = true
             return .run { send in
-                let currentWeather = try await self.weatherClient.fetchCurrentWeather(keyword)
-                await send(.fetchedCurrentWeather(currentWeather))
+                let result = try await self.weatherClient.fetchCurrentWeather(keyword)
+                
+                switch result {
+                case .success(let currentWeather):
+                    await send(.fetchedCurrentWeather(currentWeather))
+                case .failure(let error):
+                    await send(.setError(error.localizedDescription))
+                }
             }
         case .fetchForecaset(keyword: let keyword):
             state.isLoading = true
             return .run { send in
-                let forecast = try await self.weatherClient.fetchForecast(keyword)
-                await send(.fetchedForecast(forecast))
+                let result = try await self.weatherClient.fetchForecast(keyword)
+                
+                switch result {
+                case .success(let forecaset):
+                    await send(.fetchedForecast(forecaset))
+                case .failure(let error):
+                    await send(.setError(error.localizedDescription))
+                }
             }
         case .fetchedCurrentWeather(let currentWeather):
             state.isLoading = false
@@ -59,8 +71,14 @@ struct DetailReducer {
         case .fetchRcentHistory(let keyword):
             state.isLoading = true
             return .run { send in
-                let recentHistory = try await self.weatherClient.fetchRecentHistory(keyword)
-                await send(.fetchedRecentHistory(recentHistory))
+                let result = try await self.weatherClient.fetchRecentHistory(keyword)
+                
+                switch result {
+                case .success(let recentHistory):
+                    await send(.fetchedRecentHistory(recentHistory))
+                case .failure(let error):
+                    await send(.setError(error.localizedDescription))
+                }
             }
         case .fetchedRecentHistory(let recentHistory):
             state.isLoading = false

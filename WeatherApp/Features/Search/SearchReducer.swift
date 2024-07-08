@@ -56,15 +56,31 @@ struct SearchReducer {
                     for keyword in keywords {
                         taskGroup.addTask {
                             do {
-                                let currentWeather = try await self.weatherClient.fetchCurrentWeather(keyword)
-                                let forecast = try await self.weatherClient.fetchForecast(keyword)
+                                let currentWeatherResult = try await self.weatherClient.fetchCurrentWeather(keyword)
+                                let forecasetResult = try await self.weatherClient.fetchForecast(keyword)
                                 
-                                let listItem = SearchLocationListItem(currentWeather: currentWeather, forecast: forecast, searchKeyword: keyword)
-                                await container.append(listItem)
+                                var currentWeather: CurrentWeather?
+                                var forecast: Forecast?
+                                
+                                switch currentWeatherResult {
+                                case .success(let w): currentWeather = w
+                                case .failure(let error): await send(.setError(error.localizedDescription))
+                                }
+                                
+                                switch forecasetResult {
+                                case .success(let f): forecast = f
+                                case .failure(let error): await send(.setError(error.localizedDescription))
+                                }
+                                
+                                if let c = currentWeather, let f = forecast {
+                                    let listItem = SearchLocationListItem(currentWeather: c, forecast: f, searchKeyword: keyword)
+                                    await container.append(listItem)
+                                } else {
+                                    await send(.setError("Unknown error occurred."))
+                                }
                             } catch {
                                 print("Decoding error: \(error)")
                                 await send(.setError(error.localizedDescription))
-
                             }
                         }
                     }
