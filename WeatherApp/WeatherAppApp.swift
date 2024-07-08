@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct WeatherAppApp: App {
     var body: some Scene {
         WindowGroup {
-            SearchView()
+            SearchView(store: Store(initialState: SearchReducer.State(), reducer: {
+                SearchReducer()
+            }))
         }
     }
 }
