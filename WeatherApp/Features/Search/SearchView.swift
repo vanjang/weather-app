@@ -17,35 +17,16 @@ struct SearchView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .onTapGesture {
-                            store.send(.fetchItems(keywords: [store.searchKeyword]))
-                        }
-                    TextField(
-                        "London, Paris, Seoul...", text: $store.searchKeyword.sending(\.currentSearchKeyword)
-                    )
-                    .textFieldStyle(.roundedBorder)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                }
-                .padding(.horizontal, 16)
-                
-                if let errorMessage = store.errorMessage {
-                    Text(errorMessage)
-                }
-            
-                WithViewStore(self.store, observe: { $0 }) { viewStore in
-                    if viewStore.isLoading {
-                        ProgressView()
-                    }
-                    
-                    List(content: {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            NavigationView {
+                VStack {
+                    List {
                         if let items = viewStore.listItems, !items.isEmpty {
                             ForEach(items) { item in
-                                Text(item.locationName)
+                                SearchCard(item: item)
+                                    .frame(maxWidth: .infinity)
+                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                    .listRowSeparator(.hidden)
                                     .onTapGesture {
                                         viewStore.send(.setDetailPage(isPresented: true))
                                         viewStore.send(.setSelectedItem(item))
@@ -54,18 +35,33 @@ struct SearchView: View {
                         } else {
                             Text("No result found.")
                         }
-                    })
-                    .navigationTitle("Weather")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .sheet(isPresented: viewStore.binding(get: \.shouldShowDetailPage,
-                                                          send: SearchReducer.Action.setDetailPage(isPresented:))) {
-                        let store = Store(initialState: DetailReducer.State(searchKeyword: store.selectedListItem?.searchKeyword ?? ""), reducer:  { DetailReducer() })
-                        DetailView(store: store)
                     }
+                    .listStyle(PlainListStyle())
+                    .navigationTitle("Weather")
                 }
-                
+            }
+            .sheet(isPresented: viewStore.binding(get: \.shouldShowDetailPage,
+                                                  send: SearchReducer.Action.setDetailPage(isPresented:))) {
+                let store = Store(initialState: DetailReducer.State(searchKeyword: store.selectedListItem?.searchKeyword ?? ""), reducer:  { DetailReducer() })
+                DetailView(store: store)
+            }
+            .alert(isPresented: viewStore.binding(get: \.shouldShowAlert,
+                                                  send: SearchReducer.Action.setAlert(isPresented:)), 
+                   content: {
+                Alert(title: Text(viewStore.state.errorMessage ?? ""))
+            })
+            .searchable(text: $store.searchKeyword.sending(\.currentSearchKeyword),
+                        prompt: "London, Seoul, Amsterdam...")
+            .onSubmit(of: .search) {
+                viewStore.send(.fetchItems(keywords: [store.searchKeyword]))
+            }
+            .overlay {
+                if viewStore.state.isLoading {
+                    ProgressView()
+                }
             }
         }
+        
     }
 }
 

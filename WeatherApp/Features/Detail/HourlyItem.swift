@@ -17,9 +17,9 @@ struct HourlyItem: Identifiable, Equatable {
     let temperature: String
     
     init(data: WeatherData) {
-        self.time = data.time
+        self.time = DateConverter.getDateString(from: data.time, type: .time)
         self.desc = WeatherCodeConverter.convert(data.values.weatherCode)
-        self.temperature = String(data.values.temperature)
+        self.temperature = "\(String(data.values.temperature.rounded()))°"
     }
     
 }

@@ -64,7 +64,7 @@ struct DetailReducer {
             }
         case .fetchedRecentHistory(let recentHistory):
             state.isLoading = false
-            state.recentHistoryItems = recentHistory.timelines.daily.map { DailyItem(data: $0) }
+            state.recentHistoryItems = recentHistory.timelines.daily.map { DailyItem(data: $0, isHistoric: true) }
             return .none
         case .setError(let error):
             state.errorMessage = error

@@ -19,6 +19,7 @@ struct SearchReducer {
         var searchKeyword: String = ""
         var errorMessage: String?
         var shouldShowDetailPage = false
+        var shouldShowAlert = false
         var isLoading: Bool = false
     }
     
@@ -31,7 +32,10 @@ struct SearchReducer {
         case setDetailPage(isPresented: Bool)
         case setSelectedItem(SearchLocationListItem)
         case setError(String)
+        case setAlert(isPresented: Bool)
     }
+    
+    private let localSavingKey = "searchKeywords"
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
@@ -83,19 +87,17 @@ struct SearchReducer {
                 }
             }
         case .saveKeyword(let keyword):
-            let key = "searchKeywords"
             var keywords = [keyword]
             
-            if let searchKeywords = UserDefaults.standard.array(forKey: key) as? [String], !searchKeywords.contains(keyword) {
+            if let searchKeywords = UserDefaults.standard.array(forKey: localSavingKey) as? [String], !searchKeywords.contains(keyword) {
                 keywords += searchKeywords
             }
             
-            UserDefaults.standard.set(Array(Set(keywords)), forKey: key)
+            UserDefaults.standard.set(Array(Set(keywords)), forKey: localSavingKey)
             
             return .none
         case .getPreviousSearchHistory:
-            let key = "searchKeywords"
-            let searchKeywords = UserDefaults.standard.array(forKey: key) as? [String] ?? []
+            let searchKeywords = UserDefaults.standard.array(forKey: localSavingKey) as? [String] ?? []
             
             return .run { send in
                 await send(.fetchItems(keywords: searchKeywords))
@@ -103,13 +105,17 @@ struct SearchReducer {
         case .setError(let error):
             state.errorMessage = error
             state.isLoading = false
-            return .none
+            return .run { send in
+                await send(.setAlert(isPresented: true))
+            }
         case .setDetailPage(let isPresented):
             state.shouldShowDetailPage = isPresented
             return .none
         case .setSelectedItem(let item):
             state.selectedListItem = item
-
+            return .none
+        case .setAlert(let isPresented):
+            state.shouldShowAlert = isPresented
             return .none
         }
     }

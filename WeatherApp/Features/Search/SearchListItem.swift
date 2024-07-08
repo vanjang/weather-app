@@ -21,9 +21,9 @@ struct SearchLocationListItem: Equatable, Identifiable {
     init(currentWeather: CurrentWeather, forecast: Forecast, searchKeyword: String) {
         self.locationName = currentWeather.location.name
         self.searchKeyword = searchKeyword
-        self.temperature = String(currentWeather.data.values.temperature)
+        self.temperature = String(currentWeather.data.values.temperature.rounded())
         self.weatherDesc = WeatherCodeConverter.convert(currentWeather.data.values.weatherCode)
-        self.upcomingForecastDesc = WeatherCodeConverter.convert(forecast.timelines.hourly.first?.values.weatherCode ?? 0)
+        self.upcomingForecastDesc = "then: \(WeatherCodeConverter.convert(forecast.timelines.hourly.first?.values.weatherCode ?? 0))"
     }
     
 }

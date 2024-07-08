@@ -14,14 +14,19 @@ struct DailyItem: Identifiable, Equatable {
     
     let day: String
     let desc: String
-    let minTemperature: String
-    let maxTemperature: String
+    let avgTemperature: String
+    let temperature: String
     
-    init(data: DailyWeatherData) {
-        // TODO:
-        self.day = "day"
-        self.desc = WeatherCodeConverter.convert(data.values.weatherCodeMax)
-        self.minTemperature = String(data.values.temperatureMin.rounded())
-        self.maxTemperature = String(data.values.temperatureMax.rounded())
+    init(data: DailyWeatherData, isHistoric: Bool = false) {
+        self.day = isHistoric ? DateConverter.getDateString(from: data.time, type: .dayMonth) : DateConverter.getDateString(from: data.time, type: .weekday)
+        let minDesc = WeatherCodeConverter.convert(data.values.weatherCodeMin ?? 0)
+        let maxDesc = WeatherCodeConverter.convert(data.values.weatherCodeMax ?? 0)
+        self.desc = "\(minDesc) / \(maxDesc)"
+        let avgTemperature = String(data.values.temperatureAvg?.rounded() ?? 0)
+        self.avgTemperature = "avg \(avgTemperature)°"
+        
+        let minTemperature = String(data.values.temperatureMin?.rounded() ?? 0)
+        let maxTemperature = String(data.values.temperatureMax?.rounded() ?? 0)
+        self.temperature = "\(minTemperature)°/\(maxTemperature)°"
     }
 }
