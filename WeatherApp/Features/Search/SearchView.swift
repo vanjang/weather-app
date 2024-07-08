@@ -22,7 +22,7 @@ struct SearchView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .onTapGesture {
-                            store.send(.fetchCities(keywords: [store.searchKeyword]))
+                            store.send(.fetchItems(keywords: [store.searchKeyword]))
                         }
                     TextField(
                         "London, Paris, Seoul...", text: $store.searchKeyword.sending(\.currentSearchKeyword)
@@ -43,11 +43,12 @@ struct SearchView: View {
                     }
                     
                     List(content: {
-                        if let cities = viewStore.cities, !cities.isEmpty {
-                            ForEach(cities) { city in
-                                Text(city.name)
+                        if let items = viewStore.listItems, !items.isEmpty {
+                            ForEach(items) { item in
+                                Text(item.locationName)
                                     .onTapGesture {
                                         viewStore.send(.setDetailPage(isPresented: true))
+                                        viewStore.send(.setSelectedItem(item))
                                     }
                             }
                         } else {
@@ -58,7 +59,8 @@ struct SearchView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .sheet(isPresented: viewStore.binding(get: \.shouldShowDetailPage,
                                                           send: SearchReducer.Action.setDetailPage(isPresented:))) {
-                        CityDetailView()
+                        let store = Store(initialState: DetailReducer.State(searchKeyword: store.selectedListItem?.searchKeyword ?? ""), reducer:  { DetailReducer() })
+                        DetailView(store: store)
                     }
                 }
                 

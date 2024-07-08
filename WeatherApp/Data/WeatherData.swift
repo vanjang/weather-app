@@ -9,5 +9,10 @@ import Foundation
 
 struct WeatherData: Codable, Equatable {
     let time: String
-    let values: Values
+    let values: WeatherValues
+}
+
+struct DailyWeatherData: Codable, Equatable {
+    let time: String
+    let values: DailyWeatherValues
 }

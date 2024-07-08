@@ -1,5 +1,5 @@
 //
-//  SearchClient.swift
+//  WeatherClient.swift
 //  WeatherApp
 //
 //  Created by myung hoon on 07/07/2024.
@@ -9,31 +9,34 @@ import ComposableArchitecture
 import Foundation
 
 @DependencyClient
-struct SearchClient {
-    var fetchCurrentWeathers: (String) async throws -> CurrentWeather
+struct WeatherClient {
+    var fetchCurrentWeather: (String) async throws -> CurrentWeather
     var fetchForecast: (String) async throws -> Forecast
+    var fetchRecentHistory: (String) async throws -> HistoryForecast
 }
 
-private enum SearchEndpoint: String {
+private enum WeatherEndpoint: String {
     case currentWeather = "realtime"
     case forecast = "forecast"
+    case recentHistory = "history/recent"
 }
 
-extension SearchClient: DependencyKey {
-    static var liveValue: SearchClient = Self(
-        fetchCurrentWeathers: { try await request(endpoint: .currentWeather, searchkeyword: $0) },
-        fetchForecast: { try await request(endpoint: .forecast, searchkeyword: $0) })
+extension WeatherClient: DependencyKey {
+    static var liveValue: WeatherClient = Self(
+        fetchCurrentWeather: { try await request(endpoint: .currentWeather, searchkeyword: $0) },
+        fetchForecast: { try await request(endpoint: .forecast, searchkeyword: $0) },
+        fetchRecentHistory: { try await request(endpoint: .recentHistory, searchkeyword: $0) })
 }
 
 extension DependencyValues {
-    var searchClient: SearchClient {
-        get { self[SearchClient.self] }
-        set { self[SearchClient.self] = newValue }
+    var weatherClient: WeatherClient {
+        get { self[WeatherClient.self] }
+        set { self[WeatherClient.self] = newValue }
     }
 }
 
-extension SearchClient {
-    private static func request<T: Decodable>(endpoint: SearchEndpoint, searchkeyword: String) async throws -> T {
+extension WeatherClient {
+    private static func request<T: Decodable>(endpoint: WeatherEndpoint, searchkeyword: String) async throws -> T {
         // API Key
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "API Key") as? String ?? ""
         

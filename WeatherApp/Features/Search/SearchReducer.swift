@@ -10,11 +10,12 @@ import ComposableArchitecture
 
 @Reducer
 struct SearchReducer {
-    @Dependency(\.searchClient) var searchClient
+    @Dependency(\.weatherClient) var weatherClient
     
     @ObservableState
     struct State: Equatable {
-        var cities: [City]?
+        var listItems: [SearchLocationListItem]?
+        var selectedListItem: SearchLocationListItem?
         var searchKeyword: String = ""
         var errorMessage: String?
         var shouldShowDetailPage = false
@@ -23,11 +24,12 @@ struct SearchReducer {
     
     enum Action: Equatable {
         case currentSearchKeyword(String)
-        case fetchCities(keywords: [String])
-        case fetchedCities([City])
+        case fetchItems(keywords: [String])
+        case fetchedItems([SearchLocationListItem])
         case saveKeyword(String)
         case getPreviousSearchHistory
         case setDetailPage(isPresented: Bool)
+        case setSelectedItem(SearchLocationListItem)
         case setError(String)
     }
     
@@ -35,21 +37,26 @@ struct SearchReducer {
         switch action {
         case .currentSearchKeyword(let searchKeyword):
             state.searchKeyword = searchKeyword
-            print(state.searchKeyword)
-            return .none
-        case .fetchCities(let keywords):
+            
+            if searchKeyword.isEmpty {
+                return .send(.getPreviousSearchHistory)
+            } else {
+                return .none
+            }
+        case .fetchItems(let keywords):
             state.isLoading = true
             return .run { send in
-                let citiesContainer = CitiesContainer()
+                let container = SearchLocationListItemContainer()
                 
                 await withTaskGroup(of: Void.self) { taskGroup in
                     for keyword in keywords {
                         taskGroup.addTask {
                             do {
-                                let currentWeather = try await self.searchClient.fetchCurrentWeathers(keyword)
-                                let forecast = try await self.searchClient.fetchForecast(keyword)
-                                let city = City(currentWeather: currentWeather, forecast: forecast)
-                                await citiesContainer.append(city)
+                                let currentWeather = try await self.weatherClient.fetchCurrentWeather(keyword)
+                                let forecast = try await self.weatherClient.fetchForecast(keyword)
+                                
+                                let listItem = SearchLocationListItem(currentWeather: currentWeather, forecast: forecast, searchKeyword: keyword)
+                                await container.append(listItem)
                             } catch {
                                 print("Decoding error: \(error)")
                                 await send(.setError(error.localizedDescription))
@@ -59,11 +66,11 @@ struct SearchReducer {
                     }
                 }
                 
-                let cities = await citiesContainer.cities
-                await send(.fetchedCities(cities))
+                let items = await container.items
+                await send(.fetchedItems(items))
             }
-        case .fetchedCities(cities: let cities):
-            state.cities = cities
+        case .fetchedItems(let items):
+            state.listItems = items
             state.errorMessage = nil
             state.isLoading = false
             let keyword = state.searchKeyword
@@ -91,7 +98,7 @@ struct SearchReducer {
             let searchKeywords = UserDefaults.standard.array(forKey: key) as? [String] ?? []
             
             return .run { send in
-                await send(.fetchCities(keywords: searchKeywords))
+                await send(.fetchItems(keywords: searchKeywords))
             }
         case .setError(let error):
             state.errorMessage = error
@@ -99,6 +106,10 @@ struct SearchReducer {
             return .none
         case .setDetailPage(let isPresented):
             state.shouldShowDetailPage = isPresented
+            return .none
+        case .setSelectedItem(let item):
+            state.selectedListItem = item
+
             return .none
         }
     }

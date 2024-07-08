@@ -7,25 +7,33 @@
 
 import Foundation
 
-struct Values: Codable, Equatable {
+struct WeatherValues: Codable, Equatable {
 //    let cloudBase: Double
 //    let cloudCeiling: String
 //    let cloudCover: Int
 //    let dewPoint: Double
 //    let freezingRainIntensity: Int
-//    let humidity: Int
+//    let humidity: Double
 //    let precipitationProbability: Int
 //    let pressureSurfaceLevel: Double
 //    let rainIntensity: Double//int
 //    let sleetIntensity: Int
 //    let snowIntensity: Int
-    let temperature: Double?
+    let temperature: Double
 //    let temperatureApparent: Double
 //    let uvHealthConcern: Int
 //    let uvIndex: Int
 //    let visibility: Double//int
-//    let weatherCode: Int
+    let weatherCode: Int
 //    let windDirection: Double
 //    let windGust: Double//int
 //    let windSpeed: Double
+}
+
+struct DailyWeatherValues: Codable, Equatable {
+    let temperatureAvg: Double
+    let temperatureMax: Double
+    let temperatureMin: Double
+    let weatherCodeMin: Int
+    let weatherCodeMax: Int
 }

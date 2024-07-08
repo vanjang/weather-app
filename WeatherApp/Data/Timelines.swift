@@ -10,5 +10,5 @@ import Foundation
 struct Timelines: Codable, Equatable {
     let minutely: [WeatherData]
     let hourly: [WeatherData]
-    let daily: [WeatherData]
+    let daily: [DailyWeatherData]
 }
