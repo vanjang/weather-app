@@ -33,6 +33,11 @@
 		A3F820EF2C3BF001007A9905 /* DailyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820EE2C3BF001007A9905 /* DailyItem.swift */; };
 		A3F820F12C3BF0F7007A9905 /* CurrentWeatherItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820F02C3BF0F7007A9905 /* CurrentWeatherItem.swift */; };
 		A3F820F82C3C0531007A9905 /* WeatherCodeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820F72C3C0531007A9905 /* WeatherCodeConverter.swift */; };
+		A3F820FA2C3C2695007A9905 /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820F92C3C2695007A9905 /* DateConverter.swift */; };
+		A3F820FC2C3C27B5007A9905 /* SearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820FB2C3C27B5007A9905 /* SearchCard.swift */; };
+		A3F820FE2C3C3181007A9905 /* CurrentWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820FD2C3C3181007A9905 /* CurrentWeatherView.swift */; };
+		A3F821002C3C3B4D007A9905 /* HourlyForecastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820FF2C3C3B4D007A9905 /* HourlyForecastCard.swift */; };
+		A3F821022C3C3B5F007A9905 /* DailyForecastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F821012C3C3B5F007A9905 /* DailyForecastCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +88,11 @@
 		A3F820EE2C3BF001007A9905 /* DailyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyItem.swift; sourceTree = "<group>"; };
 		A3F820F02C3BF0F7007A9905 /* CurrentWeatherItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherItem.swift; sourceTree = "<group>"; };
 		A3F820F72C3C0531007A9905 /* WeatherCodeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCodeConverter.swift; sourceTree = "<group>"; };
+		A3F820F92C3C2695007A9905 /* DateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
+		A3F820FB2C3C27B5007A9905 /* SearchCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCard.swift; sourceTree = "<group>"; };
+		A3F820FD2C3C3181007A9905 /* CurrentWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherView.swift; sourceTree = "<group>"; };
+		A3F820FF2C3C3B4D007A9905 /* HourlyForecastCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastCard.swift; sourceTree = "<group>"; };
+		A3F821012C3C3B5F007A9905 /* DailyForecastCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +220,7 @@
 			children = (
 				A37C588E2C39E0CB00FFB80C /* SearchReducer.swift */,
 				A37C58902C39E0DB00FFB80C /* SearchView.swift */,
+				A3F820FB2C3C27B5007A9905 /* SearchCard.swift */,
 				A3EED0912C3BE4F500E1EA01 /* SearchListItem.swift */,
 			);
 			path = Search;
@@ -223,6 +234,9 @@
 				A3F820EC2C3BEFF3007A9905 /* HourlyItem.swift */,
 				A3F820EE2C3BF001007A9905 /* DailyItem.swift */,
 				A3F820F02C3BF0F7007A9905 /* CurrentWeatherItem.swift */,
+				A3F820FD2C3C3181007A9905 /* CurrentWeatherView.swift */,
+				A3F820FF2C3C3B4D007A9905 /* HourlyForecastCard.swift */,
+				A3F821012C3C3B5F007A9905 /* DailyForecastCard.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -231,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				A3F820F72C3C0531007A9905 /* WeatherCodeConverter.swift */,
+				A3F820F92C3C2695007A9905 /* DateConverter.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -376,12 +391,16 @@
 				A3F820F82C3C0531007A9905 /* WeatherCodeConverter.swift in Sources */,
 				A32DBF142C3AC4DB0008375E /* Timelines.swift in Sources */,
 				A37C58912C39E0DB00FFB80C /* SearchView.swift in Sources */,
+				A3F821002C3C3B4D007A9905 /* HourlyForecastCard.swift in Sources */,
+				A3F820FA2C3C2695007A9905 /* DateConverter.swift in Sources */,
+				A3F820FE2C3C3181007A9905 /* CurrentWeatherView.swift in Sources */,
 				A37C588F2C39E0CB00FFB80C /* SearchReducer.swift in Sources */,
 				A37C58592C39DAA900FFB80C /* WeatherAppApp.swift in Sources */,
 				A32DBF0A2C3ABE550008375E /* WeatherClient.swift in Sources */,
 				A32DBF102C3AC3B70008375E /* Forecast.swift in Sources */,
 				A32DBF122C3AC3DE0008375E /* WeatherData.swift in Sources */,
 				A3F820F12C3BF0F7007A9905 /* CurrentWeatherItem.swift in Sources */,
+				A3F820FC2C3C27B5007A9905 /* SearchCard.swift in Sources */,
 				A32DBF0E2C3AC3880008375E /* Location.swift in Sources */,
 				A32DBF1F2C3B892A0008375E /* HistoryTimelines.swift in Sources */,
 				A37C58952C39E11200FFB80C /* DetailView.swift in Sources */,
@@ -390,6 +409,7 @@
 				A37C58932C39E0E900FFB80C /* DetailReducer.swift in Sources */,
 				A3F820EF2C3BF001007A9905 /* DailyItem.swift in Sources */,
 				A32DBF0C2C3AC37D0008375E /* WeatherValues.swift in Sources */,
+				A3F821022C3C3B5F007A9905 /* DailyForecastCard.swift in Sources */,
 				A32DBF1D2C3B890E0008375E /* HistoryForecast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -566,6 +586,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -597,6 +618,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

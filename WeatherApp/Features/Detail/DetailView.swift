@@ -20,62 +20,52 @@ struct DetailView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                Text(viewStore.state.currentWeatherItem?.locationName ?? "")
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
+                
+                if let item = viewStore.state.currentWeatherItem {
+                    CurrentWeatherView(item: item)
+                        .frame(maxWidth: .infinity)
+                }
                 
                 Text("Hourly Forecast")
                     .font(.headline)
-                    .padding(.leading)
-                
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 ScrollView(.horizontal) {
-                    HStack {
+                    HStack(spacing: 3) {
                         ForEach(viewStore.state.hourlyItems ?? []) { item in
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.green)
+                            HourlyForecastCard(item: item)
                                 .frame(width: 100, height: 100)
-                                .overlay {
-                                    Text("\(item.desc)")
-                                }
-                                .padding(4)
-                            
                         }
                     }
                 }
+                .padding(.leading, 16)
                 
                 VStack {
                     Text("Daily Forecast")
                         .font(.headline)
-                        .padding(.leading)
+                        .padding(.horizontal, 16)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
                     ForEach(viewStore.state.dailyItems ?? []) { item in
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue)
+                        DailyForecastCard(item: item)
+                            .padding(.horizontal, 16)
                             .frame(maxWidth: .infinity)
                             .frame(height: 100)
-                            .overlay {
-                                Text("\(item.desc)")
-                            }
-                            .padding(4)
                     }
                     
                     if viewStore.state.recentHistoryItems != nil {
                         Text("Historical Forecast")
                             .font(.headline)
-                            .padding(.leading)
+                            .padding(.horizontal, 16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
                     ForEach(viewStore.state.recentHistoryItems ?? []) { item in
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue)
+                        DailyForecastCard(item: item)
+                            .padding(.horizontal, 16)
                             .frame(maxWidth: .infinity)
                             .frame(height: 100)
-                            .overlay {
-                                Text("\(item.desc)")
-                            }
-                            .padding(4)
-                        
                     }
                 }
                 
@@ -89,15 +79,18 @@ struct DetailView: View {
                 }
                 .background(Color.blue)
                 .cornerRadius(10)
-                .padding()
-                
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .padding(16)
             }
+            .opacity(viewStore.state.isLoading ? 0 : 1)
             .overlay {
                 if viewStore.state.isLoading {
                     ProgressView()
                 }
             }
         }
+        .edgesIgnoringSafeArea(.bottom)
     }
     
 }

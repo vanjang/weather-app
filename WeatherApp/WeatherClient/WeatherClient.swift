@@ -10,9 +10,9 @@ import Foundation
 
 @DependencyClient
 struct WeatherClient {
-    var fetchCurrentWeather: (String) async throws -> CurrentWeather
-    var fetchForecast: (String) async throws -> Forecast
-    var fetchRecentHistory: (String) async throws -> HistoryForecast
+    var fetchCurrentWeather: (String) async throws -> Result<CurrentWeather, Error>
+    var fetchForecast: (String) async throws -> Result<Forecast, Error>
+    var fetchRecentHistory: (String) async throws -> Result<HistoryForecast, Error>
 }
 
 private enum WeatherEndpoint: String {
@@ -36,7 +36,7 @@ extension DependencyValues {
 }
 
 extension WeatherClient {
-    private static func request<T: Decodable>(endpoint: WeatherEndpoint, searchkeyword: String) async throws -> T {
+    private static func request<T: Decodable>(endpoint: WeatherEndpoint, searchkeyword: String) async throws -> Result<T, Error> {
         // API Key
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "API Key") as? String ?? ""
         
@@ -60,10 +60,11 @@ extension WeatherClient {
         // Decoding
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-            return try JSONDecoder().decode(T.self, from: data)
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return .success(decoded)
         }
         catch {
-            throw error
+            return .failure(error)
         }
     }
 }

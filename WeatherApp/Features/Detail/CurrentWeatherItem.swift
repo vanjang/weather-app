@@ -14,7 +14,7 @@ struct CurrentWeatherItem: Equatable {
     
     init(currentWeather: CurrentWeather) {
         self.locationName = currentWeather.location.name
-        self.desc = WeatherCodeConverter.convert(currentWeather.data.values.weatherCode)//currentWeather.data.values.weatherDescription
-        self.temperature = String(currentWeather.data.values.temperature)
+        self.desc = WeatherCodeConverter.convert(currentWeather.data.values.weatherCode ?? 0)
+        self.temperature = String(currentWeather.data.values.temperature ?? 0)
     }
 }
