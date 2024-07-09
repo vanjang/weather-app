@@ -41,6 +41,3 @@ struct WeatherCodeConverter {
         11000: "Weather Code Max"
     ]
 }
-
-
-

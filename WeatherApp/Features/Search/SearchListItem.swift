@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchLocationListItem: Equatable, Identifiable {
+struct SearchListItem: Equatable, Identifiable {
     var id: UUID {
         UUID()
     }
@@ -28,9 +28,9 @@ struct SearchLocationListItem: Equatable, Identifiable {
 }
 
 actor SearchLocationListItemContainer {
-    var items = [SearchLocationListItem]()
+    var items = [SearchListItem]()
     
-    func append(_ item: SearchLocationListItem) {
+    func append(_ item: SearchListItem) {
         items.append(item)
     }
 }

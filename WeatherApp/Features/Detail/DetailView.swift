@@ -83,6 +83,11 @@ struct DetailView: View {
                 .frame(height: 50)
                 .padding(16)
             }
+            .alert(isPresented: viewStore.binding(get: \.shouldShowAlert,
+                                                  send: DetailReducer.Action.setAlert(isPresented:)),
+                   content: {
+                Alert(title: Text(viewStore.state.errorMessage ?? ""))
+            })
             .opacity(viewStore.state.isLoading ? 0 : 1)
             .overlay {
                 if viewStore.state.isLoading {

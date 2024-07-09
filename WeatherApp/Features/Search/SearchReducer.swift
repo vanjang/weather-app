@@ -14,8 +14,8 @@ struct SearchReducer {
     
     @ObservableState
     struct State: Equatable {
-        var listItems: [SearchLocationListItem]?
-        var selectedListItem: SearchLocationListItem?
+        var listItems: [SearchListItem]?
+        var selectedListItem: SearchListItem?
         var searchKeyword: String = ""
         var errorMessage: String?
         var shouldShowDetailPage = false
@@ -26,11 +26,11 @@ struct SearchReducer {
     enum Action: Equatable {
         case currentSearchKeyword(String)
         case fetchItems(keywords: [String])
-        case fetchedItems([SearchLocationListItem])
+        case fetchedItems([SearchListItem])
         case saveKeyword(String)
         case getPreviousSearchHistory
         case setDetailPage(isPresented: Bool)
-        case setSelectedItem(SearchLocationListItem)
+        case setSelectedItem(SearchListItem)
         case setError(String)
         case setAlert(isPresented: Bool)
     }
@@ -73,7 +73,7 @@ struct SearchReducer {
                                 }
                                 
                                 if let c = currentWeather, let f = forecast {
-                                    let listItem = SearchLocationListItem(currentWeather: c, forecast: f, searchKeyword: keyword)
+                                    let listItem = SearchListItem(currentWeather: c, forecast: f, searchKeyword: keyword)
                                     await container.append(listItem)
                                 } else {
                                     await send(.setError("Unknown error occurred."))

@@ -13,7 +13,7 @@ struct SearchCard: View {
     let temperature: String
     let forecast: String
     
-    init(item: SearchLocationListItem) {
+    init(item: SearchListItem) {
         self.locationName = item.locationName
         self.currentWeather = item.weatherDesc
         self.temperature = item.temperature + "°"
@@ -59,5 +59,5 @@ struct SearchCard: View {
 }
 
 #Preview {
-    SearchCard(item: SearchLocationListItem(currentWeather: CurrentWeather(data: WeatherData(time: "", values: WeatherValues(temperature: 0, weatherCode: 0)), location: Location(lat: 0, lon: 0, name: "", type: "")), forecast: Forecast(timelines: Timelines(minutely: [], hourly: [], daily: []), location: Location(lat: 0, lon: 0, name: "", type: "")), searchKeyword: ""))
+    SearchCard(item: SearchListItem(currentWeather: CurrentWeather(data: WeatherData(time: "", values: WeatherValues(temperature: 0, weatherCode: 0)), location: Location(lat: 0, lon: 0, name: "", type: "")), forecast: Forecast(timelines: Timelines(minutely: [], hourly: [], daily: []), location: Location(lat: 0, lon: 0, name: "", type: "")), searchKeyword: ""))
 }

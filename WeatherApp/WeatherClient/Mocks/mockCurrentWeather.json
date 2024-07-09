@@ -1,0 +1,33 @@
+{
+    "data": {
+        "time": "2024-07-07T17:25:00Z",
+        "values": {
+            "cloudBase": 0.28,
+            "cloudCeiling": 0.28,
+            "cloudCover": 79,
+            "dewPoint": 19,
+            "freezingRainIntensity": 0,
+            "humidity": 87,
+            "precipitationProbability": 0,
+            "pressureSurfaceLevel": 993.9,
+            "rainIntensity": 0,
+            "sleetIntensity": 0,
+            "snowIntensity": 0,
+            "temperature": 21.19,
+            "temperatureApparent": 21.19,
+            "uvHealthConcern": 0,
+            "uvIndex": 0,
+            "visibility": 11.66,
+            "weatherCode": 1001,
+            "windDirection": 9.5,
+            "windGust": 3.5,
+            "windSpeed": 1.63
+        }
+    },
+    "location": {
+        "lat": 45.4542121887207,
+        "lon": 9.111351013183594,
+        "name": "Milano, Lombardia, Italia",
+        "type": "administrative"
+    }
+}
