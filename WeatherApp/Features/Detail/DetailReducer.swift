@@ -20,6 +20,7 @@ struct DetailReducer {
         var dailyItems: [DailyItem]?
         var recentHistoryItems: [DailyItem]?
         var errorMessage: String?
+        var shouldShowAlert = false
         var isLoading: Bool = false
     }
     
@@ -31,6 +32,7 @@ struct DetailReducer {
         case fetchRcentHistory(keyword: String)
         case fetchedRecentHistory(HistoryForecast)
         case setError(String)
+        case setAlert(isPresented: Bool)
     }
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
@@ -86,6 +88,12 @@ struct DetailReducer {
             return .none
         case .setError(let error):
             state.errorMessage = error
+            state.isLoading = false
+            return .run { send in
+                await send(.setAlert(isPresented: true))
+            }
+        case .setAlert(isPresented: let isPresented):
+            state.shouldShowAlert = isPresented
             return .none
         }
     }

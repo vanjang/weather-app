@@ -1,13 +1,13 @@
 //
-//  SearchTest.swift
+//  DetailTests.swift
 //  WeatherAppTests
 //
-//  Created by myung hoon on 08/07/2024.
+//  Created by myung hoon on 09/07/2024.
 //
 
 import XCTest
 
-final class SearchTest: XCTestCase {
+final class DetailTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
