@@ -68,3 +68,17 @@ extension WeatherClient {
         }
     }
 }
+
+extension WeatherClient: TestDependencyKey {
+    static let testValue: WeatherClient = Self(
+        fetchCurrentWeather: { keyword in
+            fetchMockData(filename: "mockCurrentWeather")
+        },
+        fetchForecast: { keyword in
+            fetchMockData(filename: "mockForecast")
+        },
+        fetchRecentHistory: { keyword in
+            fetchMockData(filename: "mockRecentHistory")
+        }
+    )
+}

@@ -6,30 +6,101 @@
 //
 
 import XCTest
+import ComposableArchitecture
+@testable import WeatherApp
 
+@MainActor
 final class DetailTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+ 
+    func testCurrentWeather() async throws {
+        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+            DetailReducer()
+        } withDependencies: {
+            $0.weatherClient = .testValue
+        }
+        
+        let mocks = Mocks()
+        
+        await store.send(\.fetchCurrentWeather, mocks.searchKeyword) {
+            $0.isLoading = true
+        }
+        
+        await store.receive(\.fetchedCurrentWeather, timeout: .seconds(2)) {
+            $0.isLoading = false
+            $0.currentWeatherItem = CurrentWeatherItem(currentWeather: mocks.currentWeather)
         }
     }
-
+    
+    func testForecast() async throws {
+        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+            DetailReducer()
+        } withDependencies: {
+            $0.weatherClient = .testValue
+        }
+        
+        let mocks = Mocks()
+        
+        await store.send(\.fetchForecaset, mocks.searchKeyword) {
+            $0.isLoading = true
+        }
+        
+        await store.receive(\.fetchedForecast, timeout: .seconds(2)) {
+            $0.isLoading = false
+            $0.hourlyItems = mocks.hourlyItems
+            $0.dailyItems = mocks.dailyItems
+        }
+    }
+    
+    func testRecentHistoryForecast() async throws {
+        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+            DetailReducer()
+        } withDependencies: {
+            $0.weatherClient = .testValue
+        }
+        
+        let mocks = Mocks()
+        
+        await store.send(\.fetchRcentHistory, mocks.searchKeyword) {
+            $0.isLoading = true
+        }
+        
+        await store.receive(\.fetchedRecentHistory, timeout: .seconds(2)) {
+            $0.isLoading = false
+            $0.recentHistoryItems = mocks.recentHistoryForecastItems
+        }
+    }
+    
+    func testError() async throws {
+        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+            DetailReducer()
+        } withDependencies: {
+            $0.weatherClient = .testValue
+        }
+        
+        let errorMessage = "error message"
+        await store.send(\.setError, errorMessage) {
+            $0.errorMessage = errorMessage
+        }
+        
+        await store.receive(\.setAlert) {
+            $0.shouldShowAlert = true
+        }
+    }
+    
+    func testAlert() async throws {
+        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+            DetailReducer()
+        } withDependencies: {
+            $0.weatherClient = .testValue
+        }
+        
+        // Only case to present alerts in this app is when error occurs, so send an error.
+        await store.send(\.setError, "error message") {
+            $0.errorMessage = "error message"
+        }
+        
+        await store.receive(\.setAlert) {
+            $0.shouldShowAlert = true
+        }
+    }
 }
