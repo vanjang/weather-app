@@ -53,7 +53,7 @@ struct SearchView: View {
             .searchable(text: $store.searchKeyword.sending(\.currentSearchKeyword),
                         prompt: "London, Seoul, Amsterdam...")
             .onSubmit(of: .search) {
-                viewStore.send(.fetchItems(keywords: [store.searchKeyword]))
+                viewStore.send(.fetchItems(keywords: [viewStore.state.searchKeyword]))
             }
             .overlay {
                 if viewStore.state.isLoading {
