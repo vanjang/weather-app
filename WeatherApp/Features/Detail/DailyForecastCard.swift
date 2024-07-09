@@ -47,10 +47,6 @@ struct DailyForecastCard: View {
 }
 
 #Preview {
-    DailyForecastCard(item: DailyItem(data: DailyWeatherData(time: "", 
-                                                             values: DailyWeatherValues(temperatureAvg: nil,
-                                                                                        temperatureMax: nil,
-                                                                                        temperatureMin: nil,
-                                                                                        weatherCodeMin: nil,
-                                                                                        weatherCodeMax: nil))))
+    let mocks = Mocks()
+    return DailyForecastCard(item: mocks.dailyItems.first!)
 }

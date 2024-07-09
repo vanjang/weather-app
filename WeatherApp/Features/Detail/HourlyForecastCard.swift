@@ -39,5 +39,6 @@ struct HourlyForecastCard: View {
 }
 
 #Preview {
-    HourlyForecastCard(item: HourlyItem(data: WeatherData(time: "", values: WeatherValues(temperature: 0, weatherCode: 0))))
+    let mocks = Mocks()
+    return HourlyForecastCard(item: mocks.hourlyItems.first!)
 }

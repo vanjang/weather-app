@@ -14,7 +14,7 @@ struct DetailReducer {
     
     @ObservableState
     struct State: Equatable {
-        var searchKeyword: String
+        var searchword: String
         var currentWeatherItem: CurrentWeatherItem?
         var hourlyItems: [HourlyItem]?
         var dailyItems: [DailyItem]?
@@ -26,11 +26,11 @@ struct DetailReducer {
     
     enum Action {
         case fetchCurrentWeather(keyword: String)
+        case didFetchCurrentWeather(CurrentWeather)
         case fetchForecaset(keyword: String)
-        case fetchedCurrentWeather(CurrentWeather)
-        case fetchedForecast(Forecast)
+        case didFetchForecast(Forecast)
         case fetchRcentHistory(keyword: String)
-        case fetchedRecentHistory(HistoryForecast)
+        case didFetchRecentHistory(HistoryForecast)
         case setError(String)
         case setAlert(isPresented: Bool)
     }
@@ -44,7 +44,7 @@ struct DetailReducer {
                 
                 switch result {
                 case .success(let currentWeather):
-                    await send(.fetchedCurrentWeather(currentWeather))
+                    await send(.didFetchCurrentWeather(currentWeather))
                 case .failure(let error):
                     await send(.setError(error.localizedDescription))
                 }
@@ -56,16 +56,16 @@ struct DetailReducer {
                 
                 switch result {
                 case .success(let forecaset):
-                    await send(.fetchedForecast(forecaset))
+                    await send(.didFetchForecast(forecaset))
                 case .failure(let error):
                     await send(.setError(error.localizedDescription))
                 }
             }
-        case .fetchedCurrentWeather(let currentWeather):
+        case .didFetchCurrentWeather(let currentWeather):
             state.isLoading = false
             state.currentWeatherItem = CurrentWeatherItem(currentWeather: currentWeather)
             return .none
-        case .fetchedForecast(let forecast):
+        case .didFetchForecast(let forecast):
             state.hourlyItems = forecast.timelines.hourly.map { HourlyItem(data: $0) }
             state.dailyItems = forecast.timelines.daily.map { DailyItem(data: $0) }
             state.isLoading = false
@@ -77,12 +77,12 @@ struct DetailReducer {
                 
                 switch result {
                 case .success(let recentHistory):
-                    await send(.fetchedRecentHistory(recentHistory))
+                    await send(.didFetchRecentHistory(recentHistory))
                 case .failure(let error):
                     await send(.setError(error.localizedDescription))
                 }
             }
-        case .fetchedRecentHistory(let recentHistory):
+        case .didFetchRecentHistory(let recentHistory):
             state.isLoading = false
             state.recentHistoryItems = recentHistory.timelines.daily.map { DailyItem(data: $0, isHistoric: true) }
             return .none

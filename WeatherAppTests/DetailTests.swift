@@ -13,7 +13,7 @@ import ComposableArchitecture
 final class DetailTests: XCTestCase {
  
     func testCurrentWeather() async throws {
-        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+        let store = TestStore(initialState: DetailReducer.State(searchword: "")) {
             DetailReducer()
         } withDependencies: {
             $0.weatherClient = .testValue
@@ -21,18 +21,18 @@ final class DetailTests: XCTestCase {
         
         let mocks = Mocks()
         
-        await store.send(\.fetchCurrentWeather, mocks.searchKeyword) {
+        await store.send(\.fetchCurrentWeather, mocks.searchword) {
             $0.isLoading = true
         }
         
-        await store.receive(\.fetchedCurrentWeather, timeout: .seconds(2)) {
+        await store.receive(\.didFetchCurrentWeather, timeout: .seconds(2)) {
             $0.isLoading = false
             $0.currentWeatherItem = CurrentWeatherItem(currentWeather: mocks.currentWeather)
         }
     }
     
     func testForecast() async throws {
-        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+        let store = TestStore(initialState: DetailReducer.State(searchword: "")) {
             DetailReducer()
         } withDependencies: {
             $0.weatherClient = .testValue
@@ -40,11 +40,11 @@ final class DetailTests: XCTestCase {
         
         let mocks = Mocks()
         
-        await store.send(\.fetchForecaset, mocks.searchKeyword) {
+        await store.send(\.fetchForecaset, mocks.searchword) {
             $0.isLoading = true
         }
         
-        await store.receive(\.fetchedForecast, timeout: .seconds(2)) {
+        await store.receive(\.didFetchForecast, timeout: .seconds(2)) {
             $0.isLoading = false
             $0.hourlyItems = mocks.hourlyItems
             $0.dailyItems = mocks.dailyItems
@@ -52,7 +52,7 @@ final class DetailTests: XCTestCase {
     }
     
     func testRecentHistoryForecast() async throws {
-        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+        let store = TestStore(initialState: DetailReducer.State(searchword: "")) {
             DetailReducer()
         } withDependencies: {
             $0.weatherClient = .testValue
@@ -60,18 +60,18 @@ final class DetailTests: XCTestCase {
         
         let mocks = Mocks()
         
-        await store.send(\.fetchRcentHistory, mocks.searchKeyword) {
+        await store.send(\.fetchRcentHistory, mocks.searchword) {
             $0.isLoading = true
         }
         
-        await store.receive(\.fetchedRecentHistory, timeout: .seconds(2)) {
+        await store.receive(\.didFetchRecentHistory, timeout: .seconds(2)) {
             $0.isLoading = false
             $0.recentHistoryItems = mocks.recentHistoryForecastItems
         }
     }
     
     func testError() async throws {
-        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+        let store = TestStore(initialState: DetailReducer.State(searchword: "")) {
             DetailReducer()
         } withDependencies: {
             $0.weatherClient = .testValue
@@ -88,7 +88,7 @@ final class DetailTests: XCTestCase {
     }
     
     func testAlert() async throws {
-        let store = TestStore(initialState: DetailReducer.State(searchKeyword: "")) {
+        let store = TestStore(initialState: DetailReducer.State(searchword: "")) {
             DetailReducer()
         } withDependencies: {
             $0.weatherClient = .testValue

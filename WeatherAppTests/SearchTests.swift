@@ -21,18 +21,18 @@ final class SearchTests: XCTestCase {
     
         let mocks = Mocks()
         
-        await store.send(\.fetchItems, [mocks.searchKeyword]) {
+        await store.send(\.fetchItems, [mocks.searchword]) {
             $0.isLoading = true
         }
         
-        await store.receive(\.fetchedItems, timeout: .seconds(2)) {
+        await store.receive(\.didFetchItems, timeout: .seconds(2)) {
             $0.isLoading = false
             $0.listItems = [mocks.searchListItem]
         }
 
     }
     
-    func testValidSearchKeyword() async throws {
+    func testValidSearchword() async throws {
         let store = TestStore(initialState: SearchReducer.State()) {
             SearchReducer()
         } withDependencies: {
@@ -41,8 +41,8 @@ final class SearchTests: XCTestCase {
         
         let mocks = Mocks()
         
-        await store.send(\.currentSearchKeyword, mocks.searchKeyword) {
-            $0.searchKeyword = mocks.searchKeyword
+        await store.send(\.didSearchwordChanged, mocks.searchword) {
+            $0.searchword = mocks.searchword
         }
     }
 

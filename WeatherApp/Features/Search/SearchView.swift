@@ -13,7 +13,8 @@ struct SearchView: View {
     
     init(store: StoreOf<SearchReducer>) {
         self.store = store
-        store.send(.getPreviousSearchHistory)
+        // default setup
+        store.send(.fetchSearchHistory)
     }
     
     var body: some View {
@@ -24,7 +25,6 @@ struct SearchView: View {
                         if let items = viewStore.listItems, !items.isEmpty {
                             ForEach(items) { item in
                                 SearchCard(item: item)
-                                    .frame(maxWidth: .infinity)
                                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .listRowSeparator(.hidden)
                                     .onTapGesture {
@@ -42,7 +42,7 @@ struct SearchView: View {
             }
             .sheet(isPresented: viewStore.binding(get: \.shouldShowDetailPage,
                                                   send: SearchReducer.Action.setDetailPage(isPresented:))) {
-                let store = Store(initialState: DetailReducer.State(searchKeyword: store.selectedListItem?.searchKeyword ?? ""), reducer:  { DetailReducer() })
+                let store = Store(initialState: DetailReducer.State(searchword: store.selectedListItem?.searchword ?? ""), reducer:  { DetailReducer() })
                 DetailView(store: store)
             }
             .alert(isPresented: viewStore.binding(get: \.shouldShowAlert,
@@ -50,10 +50,10 @@ struct SearchView: View {
                    content: {
                 Alert(title: Text(viewStore.state.errorMessage ?? ""))
             })
-            .searchable(text: $store.searchKeyword.sending(\.currentSearchKeyword),
+            .searchable(text: $store.searchword.sending(\.didSearchwordChanged),
                         prompt: "London, Seoul, Amsterdam...")
             .onSubmit(of: .search) {
-                viewStore.send(.fetchItems(keywords: [viewStore.state.searchKeyword]))
+                viewStore.send(.fetchItems(keywords: [viewStore.state.searchword]))
             }
             .overlay {
                 if viewStore.state.isLoading {

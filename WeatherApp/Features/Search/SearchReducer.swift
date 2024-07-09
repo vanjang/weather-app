@@ -16,7 +16,7 @@ struct SearchReducer {
     struct State: Equatable {
         var listItems: [SearchListItem]?
         var selectedListItem: SearchListItem?
-        var searchKeyword: String = ""
+        var searchword: String = ""
         var errorMessage: String?
         var shouldShowDetailPage = false
         var shouldShowAlert = false
@@ -24,11 +24,11 @@ struct SearchReducer {
     }
     
     enum Action: Equatable {
-        case currentSearchKeyword(String)
+        case fetchSearchHistory
+        case didSearchwordChanged(String)
         case fetchItems(keywords: [String])
-        case fetchedItems([SearchListItem])
+        case didFetchItems([SearchListItem])
         case saveKeyword(String)
-        case getPreviousSearchHistory
         case setDetailPage(isPresented: Bool)
         case setSelectedItem(SearchListItem)
         case setError(String)
@@ -39,61 +39,29 @@ struct SearchReducer {
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case .currentSearchKeyword(let searchKeyword):
-            state.searchKeyword = searchKeyword
+        case .didSearchwordChanged(let searchword):
+            let lastKeyword = state.searchword
+            state.searchword = searchword
+            let currentKeyword = state.searchword
             
-            if searchKeyword.isEmpty {
-                return .send(.getPreviousSearchHistory)
+            let keywordClearedFromKeyboard = currentKeyword.isEmpty && !lastKeyword.isEmpty
+            
+            // only fetch when user deleted search keyword entiely in order to prevent unnecessary API calls.
+            if keywordClearedFromKeyboard {
+                return .send(.fetchSearchHistory)
             } else {
                 return .none
             }
         case .fetchItems(let keywords):
             state.isLoading = true
             return .run { send in
-                let container = SearchLocationListItemContainer()
-                
-                await withTaskGroup(of: Void.self) { taskGroup in
-                    for keyword in keywords {
-                        taskGroup.addTask {
-                            do {
-                                let currentWeatherResult = try await self.weatherClient.fetchCurrentWeather(keyword)
-                                let forecasetResult = try await self.weatherClient.fetchForecast(keyword)
-                                
-                                var currentWeather: CurrentWeather?
-                                var forecast: Forecast?
-                                
-                                switch currentWeatherResult {
-                                case .success(let w): currentWeather = w
-                                case .failure(let error): await send(.setError(error.localizedDescription))
-                                }
-                                
-                                switch forecasetResult {
-                                case .success(let f): forecast = f
-                                case .failure(let error): await send(.setError(error.localizedDescription))
-                                }
-                                
-                                if let c = currentWeather, let f = forecast {
-                                    let listItem = SearchListItem(currentWeather: c, forecast: f, searchKeyword: keyword)
-                                    await container.append(listItem)
-                                } else {
-                                    await send(.setError("Unknown error occurred."))
-                                }
-                            } catch {
-                                print("Decoding error: \(error)")
-                                await send(.setError(error.localizedDescription))
-                            }
-                        }
-                    }
-                }
-                
-                let items = await container.items
-                await send(.fetchedItems(items))
+                let items = try await fetchWeatherData(forKeywords: keywords, weatherClient: self.weatherClient)
+                await send(.didFetchItems(items))
             }
-        case .fetchedItems(let items):
+        case .didFetchItems(let items):
             state.listItems = items
-            state.errorMessage = nil
             state.isLoading = false
-            let keyword = state.searchKeyword
+            let keyword = state.searchword
             
             if keyword.isEmpty {
                 return .none
@@ -105,18 +73,19 @@ struct SearchReducer {
         case .saveKeyword(let keyword):
             var keywords = [keyword]
             
-            if let searchKeywords = UserDefaults.standard.array(forKey: localSavingKey) as? [String], !searchKeywords.contains(keyword) {
-                keywords += searchKeywords
+            // save keywords if not duplicated.
+            if let searchwords = UserDefaults.standard.array(forKey: localSavingKey) as? [String], !searchwords.contains(keyword) {
+                keywords += searchwords
             }
             
             UserDefaults.standard.set(Array(Set(keywords)), forKey: localSavingKey)
             
             return .none
-        case .getPreviousSearchHistory:
-            let searchKeywords = UserDefaults.standard.array(forKey: localSavingKey) as? [String] ?? []
+        case .fetchSearchHistory:
+            let searchwords = UserDefaults.standard.array(forKey: localSavingKey) as? [String] ?? []
             
             return .run { send in
-                await send(.fetchItems(keywords: searchKeywords))
+                await send(.fetchItems(keywords: searchwords))
             }
         case .setError(let error):
             state.errorMessage = error
@@ -136,4 +105,34 @@ struct SearchReducer {
         }
     }
     
+    /// A throwable function handling multiple async works in task group.
+    func fetchWeatherData(forKeywords keywords: [String], weatherClient: WeatherClient) async throws -> [SearchListItem] {
+        let container = SearchListContainer()
+
+        await withThrowingTaskGroup(of: Void.self) { taskGroup in
+            for keyword in keywords {
+                taskGroup.addTask {
+                    do {
+                        async let currentWeather = weatherClient.fetchCurrentWeather(keyword)
+                        async let forecast = weatherClient.fetchForecast(keyword)
+
+                        let (currentWeatherResult, forecastResult) = try await (currentWeather, forecast)
+
+                        switch (currentWeatherResult, forecastResult) {
+                        case let (.success(c), .success(f)):
+                            let listItem = SearchListItem(currentWeather: c, forecast: f, searchword: keyword)
+                            await container.append(listItem)
+                        case let (.failure(error), _), let (_, .failure(error)):
+                            print("failure....\(error.localizedDescription)")
+                            throw error
+                        }
+                    } catch {
+                        print("Decoding error: \(error)")
+                        throw error
+                    }
+                }
+            }
+        }
+        return await container.items
+    }
 }

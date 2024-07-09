@@ -11,8 +11,3 @@ struct Forecast: Codable, Equatable {
     let timelines: Timelines
     let location: Location
 }
-
-extension Forecast {
-    static let mock: Forecast = Forecast(timelines: Timelines(minutely: [], hourly: [], daily: []),
-                                         location: Location(lat: 0.0, lon: 0.0, name: "", type: ""))
-}

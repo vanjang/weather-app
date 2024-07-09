@@ -8,29 +8,25 @@
 import SwiftUI
 
 struct CurrentWeatherView: View {
-    let locationName: String
-    let temperature: String
-    let desc: String
+    private let item: CurrentWeatherItem
     
     init(item: CurrentWeatherItem) {
-        self.locationName = item.locationName
-        self.temperature = item.temperature + "°"
-        self.desc = item.desc
+        self.item = item
     }
     
     var body: some View {
         VStack {
-            Text(locationName)
+            Text(item.locationName)
                 .font(.title)
                 .foregroundColor(.blue)
                 .lineLimit(2)
             
-            Text(temperature)
+            Text(item.temperature)
                 .font(.headline)
                 .foregroundColor(.blue)
                 .lineLimit(1)
             
-            Text(desc)
+            Text(item.desc)
                 .font(.headline)
                 .foregroundColor(.blue)
                 .lineLimit(1)
@@ -40,6 +36,6 @@ struct CurrentWeatherView: View {
 }
 
 #Preview {
-    CurrentWeatherView(item: CurrentWeatherItem(currentWeather: CurrentWeather(data: WeatherData(time: "", values: WeatherValues(temperature: 0, weatherCode: 0)),
-                                                                               location: Location(lat: 0, lon: 0, name: "", type: ""))))
+    let mocks = Mocks()
+    return CurrentWeatherView(item: CurrentWeatherItem(currentWeather: mocks.currentWeather))
 }

@@ -9,7 +9,7 @@ import Foundation
 @testable import WeatherApp
 
 struct Mocks {
-    let searchKeyword = "milano"
+    let searchword = "milano"
     
     let weatherData = WeatherData(time: "", values: WeatherValues(temperature: 21.19, weatherCode: 1001))
     let location = Location(lat: 0.0, lon: 0.0, name: "Milano, Lombardia, Italia", type: "")
@@ -26,7 +26,7 @@ struct Mocks {
         Forecast(timelines: Timelines(minutely: [], hourly: [forecastWeatherData], daily: []), location: location)
     }
     var searchListItem: SearchListItem {
-        SearchListItem(currentWeather: currentWeather, forecast: forecast, searchKeyword: searchKeyword)
+        SearchListItem(currentWeather: currentWeather, forecast: forecast, searchword: searchword)
     }
     
     let day1 = DailyWeatherValues(temperatureAvg: 22.76,

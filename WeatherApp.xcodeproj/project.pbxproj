@@ -41,6 +41,7 @@
 		A3BA638F2C3D3B85007C28BD /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA638D2C3D37FE007C28BD /* MockData.swift */; };
 		A3BA63912C3D7208007C28BD /* DetailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA63902C3D7208007C28BD /* DetailTests.swift */; };
 		A3BA63932C3D7507007C28BD /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA63922C3D7507007C28BD /* Mocks.swift */; };
+		A3BA63942C3DA349007C28BD /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA63922C3D7507007C28BD /* Mocks.swift */; };
 		A3EED0922C3BE4F500E1EA01 /* SearchListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EED0912C3BE4F500E1EA01 /* SearchListItem.swift */; };
 		A3F820ED2C3BEFF3007A9905 /* HourlyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820EC2C3BEFF3007A9905 /* HourlyItem.swift */; };
 		A3F820EF2C3BF001007A9905 /* DailyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F820EE2C3BF001007A9905 /* DailyItem.swift */; };
@@ -434,6 +435,7 @@
 				A32DBF142C3AC4DB0008375E /* Timelines.swift in Sources */,
 				A37C58912C39E0DB00FFB80C /* SearchView.swift in Sources */,
 				A3F821002C3C3B4D007A9905 /* HourlyForecastCard.swift in Sources */,
+				A3BA63942C3DA349007C28BD /* Mocks.swift in Sources */,
 				A3F820FA2C3C2695007A9905 /* DateConverter.swift in Sources */,
 				A3F820FE2C3C3181007A9905 /* CurrentWeatherView.swift in Sources */,
 				A37C588F2C39E0CB00FFB80C /* SearchReducer.swift in Sources */,

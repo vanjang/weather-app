@@ -13,21 +13,21 @@ struct SearchListItem: Equatable, Identifiable {
     }
     
     let locationName: String
-    let searchKeyword: String
+    let searchword: String
     let temperature: String
     let weatherDesc: String
     let upcomingForecastDesc: String
     
-    init(currentWeather: CurrentWeather, forecast: Forecast, searchKeyword: String) {
+    init(currentWeather: CurrentWeather, forecast: Forecast, searchword: String) {
         self.locationName = currentWeather.location.name
-        self.searchKeyword = searchKeyword
-        self.temperature = String(currentWeather.data.values.temperature?.rounded() ?? 0)
+        self.searchword = searchword
+        self.temperature = "\(String(currentWeather.data.values.temperature?.rounded() ?? 0))°"
         self.weatherDesc = WeatherCodeConverter.convert(currentWeather.data.values.weatherCode ?? 0)
         self.upcomingForecastDesc = "then: \(WeatherCodeConverter.convert(forecast.timelines.hourly.first?.values.weatherCode ?? 0))"
     }
 }
 
-actor SearchLocationListItemContainer {
+actor SearchListContainer {
     var items = [SearchListItem]()
     
     func append(_ item: SearchListItem) {

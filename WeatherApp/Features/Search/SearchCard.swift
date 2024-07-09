@@ -8,56 +8,51 @@
 import SwiftUI
 
 struct SearchCard: View {
-    let locationName: String
-    let currentWeather: String
-    let temperature: String
-    let forecast: String
+    private let item: SearchListItem
     
     init(item: SearchListItem) {
-        self.locationName = item.locationName
-        self.currentWeather = item.weatherDesc
-        self.temperature = item.temperature + "°"
-        self.forecast = item.upcomingForecastDesc
+        self.item = item
     }
     
     var body: some View {
         VStack {
             HStack {
-                Text(locationName)
+                Text(item.locationName)
                     .font(.headline)
                     .foregroundColor(.blue)
                     .lineLimit(1)
-                                  
+                
                 Spacer()
                 
-                Text(currentWeather)
+                Text(item.weatherDesc)
                     .font(.headline)
                     .foregroundColor(.blue)
                     .lineLimit(1)
             }
             
             HStack {
-                Text(temperature)
+                Text(item.temperature)
                     .font(.subheadline)
                     .foregroundColor(.blue)
                     .lineLimit(1)
                 
                 Spacer()
                 
-                Text(forecast)
+                Text(item.upcomingForecastDesc)
                     .font(.subheadline)
                     .foregroundColor(.blue)
                     .lineLimit(1)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-         .padding(12)
-         .background(Color.white)
-         .cornerRadius(10)
-         .shadow(radius: 3)
-     }
+        .padding(12)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 3)
+    }
 }
 
 #Preview {
-    SearchCard(item: SearchListItem(currentWeather: CurrentWeather(data: WeatherData(time: "", values: WeatherValues(temperature: 0, weatherCode: 0)), location: Location(lat: 0, lon: 0, name: "", type: "")), forecast: Forecast(timelines: Timelines(minutely: [], hourly: [], daily: []), location: Location(lat: 0, lon: 0, name: "", type: "")), searchKeyword: ""))
+    let mocks = Mocks()
+    return SearchCard(item: mocks.searchListItem)
 }

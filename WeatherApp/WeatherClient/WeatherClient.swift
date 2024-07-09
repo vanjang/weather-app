@@ -23,9 +23,9 @@ private enum WeatherEndpoint: String {
 
 extension WeatherClient: DependencyKey {
     static var liveValue: WeatherClient = Self(
-        fetchCurrentWeather: { try await request(endpoint: .currentWeather, searchkeyword: $0) },
-        fetchForecast: { try await request(endpoint: .forecast, searchkeyword: $0) },
-        fetchRecentHistory: { try await request(endpoint: .recentHistory, searchkeyword: $0) })
+        fetchCurrentWeather: { try await request(endpoint: .currentWeather, searchword: $0) },
+        fetchForecast: { try await request(endpoint: .forecast, searchword: $0) },
+        fetchRecentHistory: { try await request(endpoint: .recentHistory, searchword: $0) })
 }
 
 extension DependencyValues {
@@ -36,7 +36,7 @@ extension DependencyValues {
 }
 
 extension WeatherClient {
-    private static func request<T: Decodable>(endpoint: WeatherEndpoint, searchkeyword: String) async throws -> Result<T, Error> {
+    private static func request<T: Decodable>(endpoint: WeatherEndpoint, searchword: String) async throws -> Result<T, Error> {
         // API Key
         let apiKey = Bundle.main.object(forInfoDictionaryKey: "API Key") as? String ?? ""
         
@@ -46,7 +46,7 @@ extension WeatherClient {
         // Query
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         let queryItems: [URLQueryItem] = [
-            URLQueryItem(name: "location", value: searchkeyword),
+            URLQueryItem(name: "location", value: searchword),
           URLQueryItem(name: "apikey", value: apiKey),
         ]
         components.queryItems = components.queryItems.map { $0 + queryItems } ?? queryItems
