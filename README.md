@@ -2,7 +2,7 @@
 
 This is a tiny yet powerful weather app that fulfills all the functionalities expected of a weather forecast app! I thoroughly enjoyed exploring this new technology—TCA—which, while having a bit of a steep learning curve, provided me with immense joy and knowledge. The app offers the following features:
 - Search for locations
-- Save your search history
+- Save your search history. 'Search' button on the keyboard should be pressed to save.
 - Provide current weather, temperature, and upcoming forecast
 - Feature a detail page for your chosen location, including hourly, daily, and historical forecasts
 
