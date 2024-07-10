@@ -150,6 +150,44 @@
 			path = WeatherClient;
 			sourceTree = "<group>";
 		};
+		A3745AE72C3E99B00003F7FE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A37C58902C39E0DB00FFB80C /* SearchView.swift */,
+				A3F820FB2C3C27B5007A9905 /* SearchCard.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A3745AE82C3E99BA0003F7FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A3EED0912C3BE4F500E1EA01 /* SearchListItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A3745AE92C3E99DE0003F7FE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A37C58942C39E11200FFB80C /* DetailView.swift */,
+				A3F820FD2C3C3181007A9905 /* CurrentWeatherView.swift */,
+				A3F820FF2C3C3B4D007A9905 /* HourlyForecastCard.swift */,
+				A3F821012C3C3B5F007A9905 /* DailyForecastCard.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A3745AEA2C3E99E30003F7FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A3F820EC2C3BEFF3007A9905 /* HourlyItem.swift */,
+				A3F820EE2C3BF001007A9905 /* DailyItem.swift */,
+				A3F820F02C3BF0F7007A9905 /* CurrentWeatherItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		A37C584C2C39DAA900FFB80C = {
 			isa = PBXGroup;
 			children = (
@@ -242,9 +280,8 @@
 			isa = PBXGroup;
 			children = (
 				A37C588E2C39E0CB00FFB80C /* SearchReducer.swift */,
-				A37C58902C39E0DB00FFB80C /* SearchView.swift */,
-				A3F820FB2C3C27B5007A9905 /* SearchCard.swift */,
-				A3EED0912C3BE4F500E1EA01 /* SearchListItem.swift */,
+				A3745AE82C3E99BA0003F7FE /* Models */,
+				A3745AE72C3E99B00003F7FE /* Views */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -252,14 +289,9 @@
 		A37C588D2C39E0A500FFB80C /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				A3745AEA2C3E99E30003F7FE /* Models */,
+				A3745AE92C3E99DE0003F7FE /* Views */,
 				A37C58922C39E0E900FFB80C /* DetailReducer.swift */,
-				A37C58942C39E11200FFB80C /* DetailView.swift */,
-				A3F820EC2C3BEFF3007A9905 /* HourlyItem.swift */,
-				A3F820EE2C3BF001007A9905 /* DailyItem.swift */,
-				A3F820F02C3BF0F7007A9905 /* CurrentWeatherItem.swift */,
-				A3F820FD2C3C3181007A9905 /* CurrentWeatherView.swift */,
-				A3F820FF2C3C3B4D007A9905 /* HourlyForecastCard.swift */,
-				A3F821012C3C3B5F007A9905 /* DailyForecastCard.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";

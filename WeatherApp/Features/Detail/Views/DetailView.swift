@@ -14,8 +14,8 @@ struct DetailView: View {
     init(store: StoreOf<DetailReducer>) {
         self.store = store
         // default setups
-        store.send(.fetchCurrentWeather(keyword: store.state.searchword))
-        store.send(.fetchForecaset(keyword: store.state.searchword))
+        store.send(.fetchCurrentWeather(searchword: store.state.searchword))
+        store.send(.fetchForecaset(searchword: store.state.searchword))
     }
     
     var body: some View {
@@ -71,7 +71,7 @@ struct DetailView: View {
                 }
                 
                 Button(action: {
-                    viewStore.send(.fetchRcentHistory(keyword: viewStore.searchword))
+                    viewStore.send(.fetchRcentHistory(searchword: viewStore.searchword))
                 }) {
                     Text("Load Historical Forecast")
                         .foregroundColor(.white)

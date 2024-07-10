@@ -27,6 +27,7 @@ struct SearchListItem: Equatable, Identifiable {
     }
 }
 
+/// An actor class that safely manages a collection of `SearchListItem` objects, ensuring thread-safe access and modifications.
 actor SearchListContainer {
     var items = [SearchListItem]()
     

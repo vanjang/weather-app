@@ -25,11 +25,11 @@ struct DetailReducer {
     }
     
     enum Action {
-        case fetchCurrentWeather(keyword: String)
+        case fetchCurrentWeather(searchword: String)
         case didFetchCurrentWeather(CurrentWeather)
-        case fetchForecaset(keyword: String)
+        case fetchForecaset(searchword: String)
         case didFetchForecast(Forecast)
-        case fetchRcentHistory(keyword: String)
+        case fetchRcentHistory(searchword: String)
         case didFetchRecentHistory(HistoryForecast)
         case setError(String)
         case setAlert(isPresented: Bool)
@@ -37,10 +37,10 @@ struct DetailReducer {
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case .fetchCurrentWeather(let keyword):
+        case .fetchCurrentWeather(let searchword):
             state.isLoading = true
             return .run { send in
-                let result = try await self.weatherClient.fetchCurrentWeather(keyword)
+                let result = try await self.weatherClient.fetchCurrentWeather(searchword)
                 
                 switch result {
                 case .success(let currentWeather):
@@ -49,10 +49,10 @@ struct DetailReducer {
                     await send(.setError(error.localizedDescription))
                 }
             }
-        case .fetchForecaset(keyword: let keyword):
+        case .fetchForecaset(let searchword):
             state.isLoading = true
             return .run { send in
-                let result = try await self.weatherClient.fetchForecast(keyword)
+                let result = try await self.weatherClient.fetchForecast(searchword)
                 
                 switch result {
                 case .success(let forecaset):
@@ -70,10 +70,10 @@ struct DetailReducer {
             state.dailyItems = forecast.timelines.daily.map { DailyItem(data: $0) }
             state.isLoading = false
             return .none
-        case .fetchRcentHistory(let keyword):
+        case .fetchRcentHistory(let searchword):
             state.isLoading = true
             return .run { send in
-                let result = try await self.weatherClient.fetchRecentHistory(keyword)
+                let result = try await self.weatherClient.fetchRecentHistory(searchword)
                 
                 switch result {
                 case .success(let recentHistory):
