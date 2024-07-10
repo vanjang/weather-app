@@ -5,6 +5,7 @@ This is a tiny yet powerful weather app that fulfills all the functionalities ex
 - Save your search history. 'Search' button on the keyboard should be pressed to save.
 - Provide current weather, temperature, and upcoming forecast
 - Feature a detail page for your chosen location, including hourly, daily, and historical forecasts
+- Cache for better performance(TTL applied)
 
 API
 - https://docs.tomorrow.io/reference/weather-forecast
