@@ -70,19 +70,22 @@ struct DetailView: View {
                     }
                 }
                 
-                Button(action: {
-                    viewStore.send(.fetchRcentHistory(searchword: viewStore.searchword))
-                }) {
-                    Text("Load Historical Forecast")
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
+                // Show historical forecast button only when it's not been fetched.
+                if viewStore.state.recentHistoryItems == nil {
+                    Button(action: {
+                        viewStore.send(.fetchRcentHistory(searchword: viewStore.searchword))
+                    }) {
+                        Text("Load Historical Forecast")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                    }
+                    .background(Color.blue)
+                    .cornerRadius(10)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .padding(16)
                 }
-                .background(Color.blue)
-                .cornerRadius(10)
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .padding(16)
             }
             .alert(isPresented: viewStore.binding(get: \.shouldShowAlert,
                                                   send: DetailReducer.Action.setAlert(isPresented:)),
@@ -96,6 +99,7 @@ struct DetailView: View {
                 }
             }
         }
+        .padding(.bottom, 25)
         .edgesIgnoringSafeArea(.bottom)
     }
     
